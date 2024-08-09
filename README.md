@@ -35,7 +35,7 @@
 2. Buka phpMyAdmin di browser:
     [http://localhost/phpmyadmin/](http://localhost/phpmyadmin/)
 
-3. Klik menu 'Databases' dan buat database `Pisah` seperti pada gambar dan klik 'create':
+3. Klik menu 'Databases' dan buat database `pisah` seperti pada gambar dan klik 'create':
     ![DB](README/step2.png)
 
 4. Klik menu 'SQL':
@@ -328,7 +328,7 @@
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
     DB_PORT=3306
-    DB_DATABASE=Pisah
+    DB_DATABASE=pisah
     DB_USERNAME=root
     DB_PASSWORD=
     ```
