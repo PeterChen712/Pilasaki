@@ -8,15 +8,62 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 56px; /* Adjust this value based on your navbar height */
+        }
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
+        }
+        .content-wrapper {
+            flex: 1 0 auto;
+            padding-bottom: 60px; /* Adjust this value based on your footer height */
+        }
+        .footer {
+            flex-shrink: 0;
+            position: flex-end;
+            bottom: 0;
+            width: 100%;
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+        .navbar {
+            background-color: #f8f9fa;
+        }
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding-left: 15px;
+                padding-right: 15px;
+                padding-bottom: 15px;
+                width: 100%;
+                background-color: #f8f9fa;
+                z-index: 1000;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .navbar-collapse.collapsing {
+                height: 0;
+                overflow: hidden;
+                transition: height 0.35s ease;
+            }
+            .navbar-collapse.show {
+                height: auto;
+                max-height: calc(100vh - 56px); /* Adjust based on navbar height */
+                overflow-y: auto;
+            }
         }
     </style>
     @yield('styles')
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">PilahSampah</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -55,8 +102,6 @@
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="bi bi-person"></i> Profil Saya</a></li>
                                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-gear"></i> Ubah Profil</a></li>
-                                <li><a class="dropdown-item" href="{{ route('email.edit') }}"><i class="bi bi-envelope"></i> Ubah Email</a></li>
-                                <li><a class="dropdown-item" href="{{ route('password.edit') }}"><i class="bi bi-key"></i> Ubah Password</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST">
@@ -76,9 +121,11 @@
         </div>
     </nav>
 
-    @yield('content')
+    <div class="content-wrapper">
+        @yield('content')
+    </div>
 
-    <footer class="bg-dark text-white text-center py-3">
+    <footer class="footer">
         <p>&copy; 2024 PilahSampah. Hak Cipta Dilindungi.</p>
     </footer>
 

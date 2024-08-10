@@ -7,7 +7,7 @@ use App\Models\User;
 
 class Question extends Model
 {
-    protected $fillable = ['title', 'content', 'user_id'];
+    protected $fillable = ['title', 'content', 'user_id', 'view_count'];
 
     public function user()
     {
@@ -19,4 +19,5 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 }
+
 

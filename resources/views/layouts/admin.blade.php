@@ -38,24 +38,17 @@
                             <i class="bi bi-bell"></i>
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center" href="{{ route('admin.profile') }}">
                             <img src="{{ auth()->user()->avatar ?? 'https://via.placeholder.com/32x32' }}" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
                             {{ auth()->user()->name }}
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="bi bi-person"></i> Profil Saya</a></li>
-                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-gear"></i> Ubah Profil</a></li>
-                            <li><a class="dropdown-item" href="{{ route('email.edit') }}"><i class="bi bi-envelope"></i> Ubah Email</a></li>
-                            <li><a class="dropdown-item" href="{{ route('password.edit') }}"><i class="bi bi-key"></i> Ubah Password</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right"></i> Logout</button>
-                                </form>
-                            </li>
-                        </ul>
+                    </li>                    
+                    <li class="nav-item">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-link nav-link"><i class="bi bi-box-arrow-right"></i> Logout</button>
+                        </form>
                     </li>
                 </ul>
             </div>

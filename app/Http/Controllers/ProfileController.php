@@ -24,7 +24,7 @@ class ProfileController extends Controller
         // Count best answers
         $bestAnswersCount = Answer::where('user_id', $user->id)->where('is_accepted', true)->count();
         
-        return view('profile', compact('user', 'activities', 'contributionsCount', 'bestAnswersCount'));
+        return view('profile.profile', compact('user', 'activities', 'contributionsCount', 'bestAnswersCount'));
     }
 
     // Method to display the edit profile page
@@ -39,20 +39,36 @@ class ProfileController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
+            'current_password' => 'nullable', // Password saat ini hanya diperlukan jika ingin mengubah password
+            'password' => ['nullable', 'confirmed', Password::min(8)->letters()->numbers()],
         ]);
 
         $user = Auth::user();
 
-        // Check if $user is a valid Eloquent model instance
         if (!$user instanceof User) {
             return redirect()->route('profile')->with('error', 'Invalid user.');
         }
 
+        // Update name
         $user->name = $request->name;
-        $user->save();  // Ensure $user is a valid Eloquent model
 
-        return redirect()->route('profile')->with('success', 'Profile updated successfully.');
+        // Update email
+        $user->email = $request->email;
+
+        // Update password jika ada input untuk password
+        if ($request->current_password) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->withErrors(['current_password' => 'Password saat ini tidak cocok.']);
+            }
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui.');
     }
+
 
     // Method to display the edit email page
     public function editEmail()
