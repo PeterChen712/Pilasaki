@@ -13,8 +13,7 @@
                     @if(isset($user))
                         <div class="text-center mb-4">
                             @if ($user->avatar)
-                                {{-- <img src="data:image/jpeg;base64,{{ $user->avatar }}" alt="{{ $user->name }}" class="rounded-circle" width="150" height="150"> --}}
-                                <img src="data:image/jpeg;base64,{{ base64_encode($user->avatar) }}" alt="{{ $user->name }}" class="rounded-circle" width="150" height="150">
+                                <img src="{{ route('avatar.show', $user->id) }}" alt="{{ $user->name }}" class="rounded-circle" width="150" height="150">
                             @else
                                 <img src="https://via.placeholder.com/150" alt="{{ $user->name }}" class="rounded-circle" width="150" height="150">
                             @endif
@@ -50,11 +49,17 @@
                             <p>Tidak ada aktivitas terbaru.</p>
                         @endif
                     @else
-                        <p>Pengguna tidak ditemuka.</p>
+                        <p>Pengguna tidak ditemukan.</p>
                     @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function refreshPage() {
+        window.location.reload();
+    }
+</script>
 @endsection

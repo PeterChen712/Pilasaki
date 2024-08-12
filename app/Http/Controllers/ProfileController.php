@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use App\Models\Activity;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -29,7 +30,6 @@ class ProfileController extends Controller
         return view('profile.profile', compact('user', 'activities', 'contributionsCount', 'bestAnswersCount'));
     }
 
-
     // Method to display the edit profile page
     public function edit()
     {
@@ -37,16 +37,17 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user'));
     }
 
-
     // Method to update user profile
     public function update(Request $request)
     {
+        Log::info('Update profile request:', $request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
             'current_password' => 'nullable',
             'password' => ['nullable', 'confirmed', Password::min(8)->letters()->numbers()],
             'cropped_avatar' => 'nullable|string', // Validate the cropped avatar
+            'bio' => 'nullable|string|max:1000',
         ]);
 
         $user = Auth::user();
@@ -57,6 +58,7 @@ class ProfileController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->bio = $request->bio;
 
         if ($request->current_password) {
             if (!Hash::check($request->current_password, $user->password)) {
@@ -74,15 +76,20 @@ class ProfileController extends Controller
             $file_name = 'avatar_' . time() . '.' . $image_type;
             $file_path = 'avatars/' . $file_name;
             
+            // Delete old avatar if exists
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            
             Storage::disk('public')->put($file_path, $image_base64);
             $user->avatar = $file_path;
         }
 
         $user->save();
+        Log::info('User after update:', $user->toArray());
 
         return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui.');
     }
-
 
     public function showAvatar($id)
     {
@@ -95,14 +102,11 @@ class ProfileController extends Controller
         }
     }
 
-
-
     // Method to display the edit email page
     public function editEmail()
     {
         return view('profile.edit-email');
     }
-
 
     // Method to update user email
     public function updateEmail(Request $request)

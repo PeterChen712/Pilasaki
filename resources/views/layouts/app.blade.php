@@ -7,7 +7,7 @@
     <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
     <style>
         body {
             display: flex;
@@ -97,7 +97,11 @@
                     @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ auth()->user()->avatar ?? 'https://via.placeholder.com/32x32' }}" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
+                                @if(auth()->user()->avatar)
+                                    <img src="{{ route('avatar.show', auth()->user()->id) }}" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
+                                @else
+                                    <img src="https://via.placeholder.com/32" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
+                                @endif
                                 {{ auth()->user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -130,7 +134,30 @@
         <p>&copy; 2024 PilahSampah. Hak Cipta Dilindungi.</p>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"></script>
+    <!-- Crop Image Modal -->
+    <div class="modal fade" id="cropImagePop" tabindex="-1" role="dialog" aria-labelledby="cropImagePopLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cropImagePopLabel">Crop Image</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="img-container">
+                        <img id="sample_image" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="crop" class="btn btn-primary">Crop</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.onkeydown = function(e) {
@@ -150,45 +177,58 @@
     </script>
     @yield('scripts')
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const avatarInput = document.getElementById('avatar');
-        const avatarImage = document.getElementById('avatar-image');
-        const avatarCropContainer = document.getElementById('avatar-crop-container');
-        const croppedAvatarInput = document.getElementById('cropped-avatar');
-        let cropper;
-    
-        if (avatarInput) {
-            avatarInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-    
-                reader.onload = function(event) {
-                    avatarImage.src = event.target.result;
-                    avatarCropContainer.style.display = 'block';
-    
-                    if (cropper) {
-                        cropper.destroy();
-                    }
-    
-                    cropper = new Cropper(avatarImage, {
+        document.addEventListener('DOMContentLoaded', function () {
+            const avatarInput = document.getElementById('avatar');
+            const sampleImage = document.getElementById('sample_image');
+            const avatarCropContainer = document.getElementById('avatar-crop-container');
+            const croppedAvatarInput = document.getElementById('cropped-avatar');
+            let cropper;
+        
+            if (avatarInput) {
+                avatarInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+        
+                    reader.onload = function(event) {
+                        sampleImage.src = event.target.result;
+                        $('#cropImagePop').modal('show');
+                    };
+        
+                    reader.readAsDataURL(file);
+                });
+        
+                $('#cropImagePop').on('shown.bs.modal', function() {
+                    cropper = new Cropper(sampleImage, {
                         aspectRatio: 1,
-                        viewMode: 1,
-                        minCropBoxWidth: 200,
-                        minCropBoxHeight: 200,
-                        crop: function(event) {
-                            const canvas = this.cropper.getCroppedCanvas({
-                                width: 300,
-                                height: 300
-                            });
-                            croppedAvatarInput.value = canvas.toDataURL('image/jpeg');
-                        }
+                        viewMode: 3,
+                        preview: '.preview'
                     });
-                };
-    
-                reader.readAsDataURL(file);
-            });
-        }
-    });
+                }).on('hidden.bs.modal', function() {
+                    cropper.destroy();
+                    cropper = null;
+                });
+        
+                document.getElementById('crop').addEventListener('click', function() {
+                    const canvas = cropper.getCroppedCanvas({
+                        width: 300,
+                        height: 300
+                    });
+        
+                    canvas.toBlob(function(blob) {
+                        const url = URL.createObjectURL(blob);
+                        const reader = new FileReader();
+        
+                        reader.readAsDataURL(blob);
+                        reader.onloadend = function() {
+                            const base64data = reader.result;
+                            $('#cropImagePop').modal('hide');
+                            avatarCropContainer.innerHTML = `<img src="${base64data}" alt="Cropped Image" class="rounded-circle" width="150" height="150">`;
+                            croppedAvatarInput.value = base64data;
+                        };
+                    });
+                });
+            }
+        });
     </script>
 </body>
 </html>

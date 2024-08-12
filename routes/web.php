@@ -41,7 +41,7 @@ Route::get('/materials/search', [MaterialController::class, 'search'])->name('ma
 Route::get('/materials/category/{slug}', [MaterialController::class, 'byCategory'])->name('materials.category');
 Route::get('/materials/{slug}', [MaterialController::class, 'show'])->name('materials.show');
 
-// Discussion (Diskusi) Routes
+// (Diskusi) Routes
 Route::get('/diskusi', [QuestionController::class, 'index'])->name('diskusi');
 Route::get('/diskusi/questions/{question}', [QuestionController::class, 'show'])->name('diskusi.questions.show');
 Route::get('/diskusi/filter/{filter}', [QuestionController::class, 'index'])->name('diskusi.filter');
