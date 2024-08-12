@@ -11,43 +11,45 @@ class AnswerController extends Controller
 {
     public function store(Request $request, Question $question)
     {
-        $validated = $request->validate([
-            'content' => 'required',
+        // Validasi
+        $request->validate([
+            'content' => 'required|string',
         ]);
 
+        // Buat jawaban
         $answer = new Answer([
-            'user_id' => Auth::id(),
-            'content' => $validated['content'],
+            'content' => $request->content,
+            'user_id' => auth()->id(),
+            'question_id' => $question->id,
         ]);
 
-        $question->answers()->save($answer);
+        $answer->save();
 
-        // Award points for answering
-        $user = User::find(Auth::id());
-        $user->points += 5;
-        $user->save();
-
-        return redirect()->route('questions.show', $question);
+        return redirect()->back()->with('success', 'Jawaban berhasil ditambahkan');
     }
 
     public function accept(Answer $answer)
     {
         // Check if the authenticated user is the owner of the question
         if (Auth::id() !== $answer->question->user_id) {
-            return redirect()->back()->with('error', 'You are not authorized to accept this answer.');
+            return redirect()->back()->with('error', 'Anda tidak berwenang untuk menerima jawaban ini.');
         }
 
+        // Update the answer
         $answer->is_accepted = true;
         $answer->save();
 
-        $answer->question->is_solved = true;
-        $answer->question->save();
+        // Update the question status
+        $question = $answer->question;
+        $question->status = Question::STATUS_SELESAI;
+        $question->save();
 
         // Award points for accepted answer
         $answerUser = User::find($answer->user_id);
         $answerUser->points += 15;
         $answerUser->save();
 
-        return redirect()->route('questions.show', $answer->question);
+        return redirect()->route('diskusi.questions.show', $question)
+                        ->with('success', 'Jawaban diterima sebagai solusi.');
     }
 }

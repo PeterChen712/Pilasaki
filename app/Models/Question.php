@@ -7,7 +7,11 @@ use App\Models\User;
 
 class Question extends Model
 {
-    protected $fillable = ['title', 'content', 'user_id', 'view_count'];
+    const STATUS_SELESAI = 'selesai';
+    const STATUS_BELUM_SELESAI = 'belum_selesai';
+    const STATUS_BELUM_TERJAWAB = 'belum_terjawab';
+
+    protected $fillable = ['user_id', 'title', 'content', 'status', 'trending', 'popularity', 'view_count'];
 
     public function user()
     {

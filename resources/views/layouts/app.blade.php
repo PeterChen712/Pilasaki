@@ -7,6 +7,7 @@
     <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
     <style>
         body {
             display: flex;
@@ -129,6 +130,7 @@
         <p>&copy; 2024 PilahSampah. Hak Cipta Dilindungi.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.onkeydown = function(e) {
@@ -147,5 +149,46 @@
         };
     </script>
     @yield('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const avatarInput = document.getElementById('avatar');
+        const avatarImage = document.getElementById('avatar-image');
+        const avatarCropContainer = document.getElementById('avatar-crop-container');
+        const croppedAvatarInput = document.getElementById('cropped-avatar');
+        let cropper;
+    
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+    
+                reader.onload = function(event) {
+                    avatarImage.src = event.target.result;
+                    avatarCropContainer.style.display = 'block';
+    
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+    
+                    cropper = new Cropper(avatarImage, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        minCropBoxWidth: 200,
+                        minCropBoxHeight: 200,
+                        crop: function(event) {
+                            const canvas = this.cropper.getCroppedCanvas({
+                                width: 300,
+                                height: 300
+                            });
+                            croppedAvatarInput.value = canvas.toDataURL('image/jpeg');
+                        }
+                    });
+                };
+    
+                reader.readAsDataURL(file);
+            });
+        }
+    });
+    </script>
 </body>
 </html>
