@@ -6,7 +6,8 @@
 <div class="container">
     <h1>{{ $question->title }}</h1>
     <p>{{ $question->content }}</p>
-    <small>Ditanyakan oleh <a href="{{ route('profile', $question->user->id) }}">{{ $question->user->name }}</a> {{ $question->created_at->diffForHumans() }}</small>
+    <small>Ditanyakan oleh <a href="{{ route('profile.show', $question->user->id) }}">{{ $question->user->name }}</a> {{ $question->created_at->diffForHumans() }}</small>
+    {{-- <small>Ditanyakan oleh <a href="{{ route('profile', $question->user->id) }}">{{ $question->user->name }}</a> {{ $question->created_at->diffForHumans() }}</small> --}}
 
     <h2 class="mt-4">Jawaban</h2>
     @foreach ($question->answers as $answer)
@@ -14,7 +15,6 @@
             <div class="card-body">
                 <p class="card-text">{!! $answer->content !!}</p>
                 <small>Dijawab oleh {{ $answer->user->name }} {{ $answer->created_at->diffForHumans() }}</small>
-               
                 @if ($question->status != 'selesai' && auth()->id() === $question->user_id)
                     <form action="{{ route('answers.accept', $answer) }}" method="POST" class="mt-2">
                         @csrf

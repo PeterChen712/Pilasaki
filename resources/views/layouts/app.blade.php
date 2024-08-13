@@ -105,7 +105,7 @@
                                 {{ auth()->user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="bi bi-person"></i> Profil Saya</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.index') }}"><i class="bi bi-person"></i> Profil Saya</a></li>
                                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-gear"></i> Ubah Profil</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>

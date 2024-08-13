@@ -5,6 +5,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('materials.index') }}">Materi</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('materials.category', $material->category->slug) }}">{{ $material->category->name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ $material->title }}</li>
         </ol>
     </nav>

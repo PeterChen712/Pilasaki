@@ -65,7 +65,7 @@ class QuestionController extends Controller
             $searchTerm = $request->search;
             $query->where(function($q) use ($searchTerm) {
                 $q->where('title', 'like', "%{$searchTerm}%")
-                  ->orWhere('content', 'like', "%{$searchTerm}%");
+                    ->orWhere('content', 'like', "%{$searchTerm}%");
             });
         }
 
@@ -77,7 +77,7 @@ class QuestionController extends Controller
 
     public function create()
     {
-        return view('questions.create');
+        return view('diskusi.questions.create');
     }
 
     public function store(Request $request)

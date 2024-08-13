@@ -30,6 +30,20 @@ class ProfileController extends Controller
         return view('profile.profile', compact('user', 'activities', 'contributionsCount', 'bestAnswersCount'));
     }
 
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        $activities = Activity::where('user_id', $user->id)->latest()->get();
+
+        // Hitung kontribusi pengguna
+        $contributionsCount = Question::where('user_id', $user->id)->count() + Answer::where('user_id', $user->id)->count();
+
+        // Hitung jawaban terbaik
+        $bestAnswersCount = Answer::where('user_id', $user->id)->where('is_accepted', true)->count();
+
+        return view('profile.profile', compact('user', 'activities', 'contributionsCount', 'bestAnswersCount'));
+    }
+
     // Method to display the edit profile page
     public function edit()
     {
@@ -101,6 +115,9 @@ class ProfileController extends Controller
             return redirect('https://via.placeholder.com/150');
         }
     }
+
+
+
 
     // Method to display the edit email page
     public function editEmail()

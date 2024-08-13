@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Material;
 use App\Models\MaterialCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Activity;
+use Illuminate\Support\Facades\DB;
 
 class MaterialController extends Controller
 {
@@ -12,14 +15,31 @@ class MaterialController extends Controller
     {
         $materials = Material::with('category')->latest()->paginate(10);
         $categories = MaterialCategory::all();
-        return view('materials.index', compact('materials', 'categories'));
+        
+        // Retrieve the last viewed material for the authenticated user
+        $recentMaterials = collect();
+        if (auth()->check() && auth()->user()->material_id) {
+            $recentMaterials = Material::where('id', auth()->user()->material_id)->get();
+        }
+
+        return view('materials.index', compact('materials', 'categories', 'recentMaterials'));
     }
+
+
+
 
     public function show($slug)
     {
         $material = Material::where('slug', $slug)->firstOrFail();
+
+        // Update the user's last viewed material
+        if (auth()->check()) {
+            DB::table('users')->where('id', auth()->id())->update(['material_id' => $material->id]);
+        }
+
         return view('materials.show', compact('material'));
     }
+
 
     public function byCategory($slug)
     {

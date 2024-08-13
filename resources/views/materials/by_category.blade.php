@@ -2,6 +2,13 @@
 @section('title', 'Materi Kategori: ' . $category->name)
 @section('content')
 <div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('materials.index') }}">Materi</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $category->name }}</li>
+        </ol>
+    </nav>
+
     <h1 class="mb-4">Materi Kategori: {{ $category->name }}</h1>
     
     <div class="row">
