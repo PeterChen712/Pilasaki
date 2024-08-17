@@ -358,11 +358,11 @@
 
         function imageClasses() {
             const classes = {
-                0: 'Baterai',
+                0: 'Elektronik',
                 1: 'Biologis',
                 2: 'Kaca Coklat',
                 3: 'Kardus',
-                4: 'Pakaian',
+                4: 'Tekstil',
                 5: 'Kaca Hijau',
                 6: 'Logam',
                 7: 'Kertas',
@@ -370,7 +370,7 @@
                 9: 'Sepatu',
                 10: 'Residu',
                 11: 'Kaca Putih'
-            };
+            }; 
             return classes;
         }
 

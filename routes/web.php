@@ -79,3 +79,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 });
 
 Route::post('ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
+
+
+
+//TEST
+Route::get('/game', function () {
+    return view('game');
+});
+
+Route::get('/test', function () {
+    return view('test');
+});
+

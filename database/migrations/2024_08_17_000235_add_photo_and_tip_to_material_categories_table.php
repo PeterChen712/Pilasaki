@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::table('material_categories', function (Blueprint $table) {
             $table->longText('photo')->nullable();
+            $table->longText('tip')->nullable();
         });
     }
 
@@ -17,6 +18,7 @@ return new class extends Migration
     {
         Schema::table('material_categories', function (Blueprint $table) {
             $table->dropColumn('photo');
+            $table->dropColumn('tip');
         });
     }
 };
