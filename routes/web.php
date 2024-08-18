@@ -19,6 +19,8 @@ use App\Http\Controllers\Admin\MaterialCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CKEditorController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\NotificationController;
+
 
 // Home & Static Pages
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -80,7 +82,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 
 Route::post('ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
 
-
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 
 //TEST
 Route::get('/game', function () {

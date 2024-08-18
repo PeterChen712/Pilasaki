@@ -31,6 +31,6 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        return redirect('/home'); // Ganti dengan halaman yang Anda inginkan setelah registrasi
+        return redirect('/'); // Ganti dengan halaman yang Anda inginkan setelah registrasi
     }
 }

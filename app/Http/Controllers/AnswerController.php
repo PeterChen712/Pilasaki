@@ -6,6 +6,8 @@ use App\Models\Question;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\AnswerCreated;
+use App\Models\Notification;
 
 class AnswerController extends Controller
 {
@@ -24,9 +26,11 @@ class AnswerController extends Controller
         ]);
 
         $answer->save();
+        event(new AnswerCreated($answer));
 
         return redirect()->back()->with('success', 'Jawaban berhasil ditambahkan');
     }
+
 
     public function accept(Answer $answer)
     {
@@ -34,6 +38,12 @@ class AnswerController extends Controller
         if (Auth::id() !== $answer->question->user_id) {
             return redirect()->back()->with('error', 'Anda tidak berwenang untuk menerima jawaban ini.');
         }
+
+        Notification::create([
+            'user_id' => $answer->user_id,
+            'title' => 'Jawaban Anda Diterima',
+            'message' => 'Jawaban Anda untuk pertanyaan "'.$answer->question->title.'" telah diterima sebagai solusi.',
+        ]);
 
         // Update the answer
         $answer->is_accepted = true;

@@ -63,10 +63,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_admin' => 'boolean',
+        'created_at' => 'datetime',
     ];
 
     public function isAdmin()
     {
         return $this->is_admin;
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+
 }
