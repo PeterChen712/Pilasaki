@@ -1,78 +1,137 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
-@section('title', 'Create Material Category')
+@section('title', 'Buat Kategori')
 
 @section('content')
-<h1>Create Material Category</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Buat Kategori') }}</div>
 
-<form action="{{ route('admin.material-categories.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
+                <div class="card-body">
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}">
+                    <form action="{{ route('admin.material-categories.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                    
+                        {{-- Form Edit Nama --}}
+                        <div class="form-group">
+                            <label for="name">{{ __('Nama') }}</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required autofocus>
+                            @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
+                        {{-- Form slug --}}
+                        <div class="form-group">
+                            <label for="slug">{{ __('Slug') }}</label>
+                            <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug" name="slug" value="{{ old('slug') }}" required>
+                            @error('slug')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
+                        {{-- Form Edit Deskrpsi --}}
+                        <div class="form-group">
+                            <label for="description">{{ __('Deskripsi') }}</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" required>{{ old('description') }}</textarea>
+                            @error('description')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
+                        {{-- Form Edit Avatar --}}
+                        <div class="form-group">
+                            <label for="avatar">{{ __('Avatar') }}</label>
+                            <input type="file" class="form-control-file @error('avatar') is-invalid @enderror" id="avatar" name="avatar" accept="image/*">
+                            @error('avatar')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        
+                        <div class="form-group" id="avatar-preview-container" style="display: none;">
+                            <img id="avatar-preview" src="#" alt="Avatar preview" style="max-width: 300px; max-height: 300px;">
+                            <button type="button" id="edit-avatar-button" class="btn btn-secondary mt-2">{{ __('Edit Avatar') }}</button>
+                        </div>
+                    
+                        <div class="form-group" id="avatar-crop-container" style="display: none;">
+                            <img id="avatar-image" src="#" alt="Avatar to crop" style="max-width: 100%;">
+                            <button type="button" id="crop-button" class="btn btn-primary mt-2">{{ __('Crop') }}</button>
+                        </div>
+                    
+                        <input type="hidden" id="cropped-avatar" name="cropped_avatar">
+
+                        <button type="submit" class="btn btn-primary">{{ __('Simpan Perubahan') }}</button>
+                    </form>                    
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label for="slug" class="form-label">Slug</label>
-        <input type="text" name="slug" id="slug" class="form-control" value="{{ old('slug') }}">
+<!-- Crop Image Modal -->
+<div class="modal fade" id="cropImagePop" tabindex="-1" role="dialog" aria-labelledby="cropImagePopLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cropImagePopLabel">Crop Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <img id="sample_image" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="crop" class="btn btn-primary">Crop</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea name="description" id="description" class="form-control">{{ old('description') }}</textarea>
-    </div>
-
-    <div class="mb-3">
-        <label for="photo" class="form-label">Photo</label>
-        <input type="file" class="form-control-file @error('photo') is-invalid @enderror" id="photo" name="photo" accept="image/*">
-        @error('photo')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
-    </div>
-
-    <div class="form-group" id="photo-preview-container" style="display: none;">
-        <img id="photo-preview" src="#" alt="Photo preview" style="max-width: 300px; max-height: 300px;">
-        <button type="button" id="edit-photo-button" class="btn btn-secondary mt-2">Edit Photo</button>
-    </div>
-
-    <div class="form-group" id="photo-crop-container" style="display: none;">
-        <img id="photo-image" src="#" alt="Photo to crop" style="max-width: 100%;">
-        <button type="button" id="crop-button" class="btn btn-primary mt-2">Crop</button>
-    </div>
-
-    <input type="hidden" id="cropped-photo" name="cropped_photo">
-
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
 @endsection
 
 @section('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const photoInput = document.getElementById('photo');
-    const photoImage = document.getElementById('photo-image');
-    const photoPreview = document.getElementById('photo-preview');
-    const photoCropContainer = document.getElementById('photo-crop-container');
-    const photoPreviewContainer = document.getElementById('photo-preview-container');
-    const croppedPhotoInput = document.getElementById('cropped-photo');
+    const avatarInput = document.getElementById('avatar');
+    const avatarImage = document.getElementById('avatar-image');
+    const avatarPreview = document.getElementById('avatar-preview');
+    const avatarCropContainer = document.getElementById('avatar-crop-container');
+    const avatarPreviewContainer = document.getElementById('avatar-preview-container');
+    const croppedAvatarInput = document.getElementById('cropped-avatar');
     const cropButton = document.getElementById('crop-button');
-    const editPhotoButton = document.getElementById('edit-photo-button');
+    const editAvatarButton = document.getElementById('edit-avatar-button');
     let cropper;
 
     function initCropper(imageUrl) {
-        photoImage.src = imageUrl;
-        photoCropContainer.style.display = 'block';
-        photoPreviewContainer.style.display = 'none';
+        avatarImage.src = imageUrl;
+        avatarCropContainer.style.display = 'block';
+        avatarPreviewContainer.style.display = 'none';
 
         if (cropper) {
             cropper.destroy();
         }
 
-        cropper = new Cropper(photoImage, {
+        cropper = new Cropper(avatarImage, {
             aspectRatio: 1,
             viewMode: 1,
             minCropBoxWidth: 200,
@@ -83,8 +142,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (photoInput) {
-        photoInput.addEventListener('change', function(e) {
+    if (avatarInput) {
+        avatarInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
@@ -103,14 +162,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     width: 300,
                     height: 300
                 });
-
+                
                 croppedCanvas.toBlob(function(blob) {
                     const fileReader = new FileReader();
                     fileReader.onload = function(e) {
-                        croppedPhotoInput.value = e.target.result;
-                        photoPreview.src = e.target.result;
-                        photoCropContainer.style.display = 'none';
-                        photoPreviewContainer.style.display = 'block';
+                        croppedAvatarInput.value = e.target.result;
+                        avatarPreview.src = e.target.result;
+                        avatarCropContainer.style.display = 'none';
+                        avatarPreviewContainer.style.display = 'block';
                     };
                     fileReader.readAsDataURL(blob);
                 }, 'image/jpeg', 0.8);
@@ -118,9 +177,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    if (editPhotoButton) {
-        editPhotoButton.addEventListener('click', function() {
-            initCropper(photoPreview.src);
+    if (editAvatarButton) {
+        editAvatarButton.addEventListener('click', function() {
+            initCropper(avatarPreview.src);
         });
     }
 
@@ -128,7 +187,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function(e) {
-            if (croppedPhotoInput.value) {
+            if (croppedAvatarInput.value) {
+                // Jika ada gambar yang di-crop, tidak perlu melakukan apa-apa lagi
                 return;
             }
             if (cropper) {
@@ -139,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }).toBlob(function(blob) {
                     const fileReader = new FileReader();
                     fileReader.onload = function(e) {
-                        croppedPhotoInput.value = e.target.result;
+                        croppedAvatarInput.value = e.target.result;
                         form.submit();
                     };
                     fileReader.readAsDataURL(blob);

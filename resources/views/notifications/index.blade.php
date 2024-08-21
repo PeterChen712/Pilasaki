@@ -11,6 +11,8 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h5>
+                                {{-- <a href="{{ route('diskusi.questions.show', $notification->relatedQuestion->id) }}"> --}}
+
                                 <a href="{{ route('diskusi.questions.show', $notification->related_question_id) }}">
                                     {{ $notification->title }}
                                 </a>
@@ -22,7 +24,7 @@
                                 @else
                                     {{ $notification->created_at }}
                                 @endif
-                            </small>
+                            </small> 
                         </div>
                         <div class="btn-group">
                             @if(!$notification->is_read)

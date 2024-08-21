@@ -2,17 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MaterialCategory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'description'];
+    protected $table = 'material_categories';
 
-    public function materials()
-    {
-        return $this->hasMany(Material::class, 'category_id');
-    }
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'photo',
+    ];
+
+    public $timestamps = true;
+
 }
+

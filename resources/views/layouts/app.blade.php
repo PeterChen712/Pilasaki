@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Edukasi Pemilahan Sampah')</title>
-    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png"/>
+    <link rel="icon" href="{{ asset('logo.png') }}" type="image/png"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
@@ -60,6 +61,47 @@
                 max-height: calc(100vh - 56px); /* Adjust based on navbar height */
                 overflow-y: auto;
             }
+
+            .nav-item {
+                margin-left: 15px; /* Atur jarak antar item navbar */
+            }
+
+            .nav-item.me-2 {
+                margin-right: 15px; /* Atur jarak untuk item notifikasi khusus */
+            }
+
+            .nav-link {
+                padding-right: 10px; /* Mengatur padding kanan untuk memberi ruang antara elemen */
+            }
+
+            .navbar .fas.fa-bell {
+                font-size: 1.2rem; /* Atur ukuran ikon lonceng */
+                vertical-align: middle; /* Sejajarkan ikon dengan teks lainnya */
+            }
+
+
+            .navbar .fas.fa-bell {
+                font-size: 1.2rem; /* Ukuran ikon lonceng */
+                vertical-align: middle; /* Sejajarkan dengan teks */
+                position: relative;
+            }
+
+            .navbar .badge {
+                font-size: 0.75rem; /* Ukuran teks pada badge */
+                padding: 0.3em 0.4em; /* Ukuran badge */
+                position: absolute;
+                top: -5px; /* Sesuaikan jarak vertikal */
+                right: -10px; /* Sesuaikan jarak horizontal */
+                transform: translate(50%, -50%); /* Memperbaiki posisi badge */
+                transform-origin: center;
+            }
+
+            .bi-bell-fill {
+                font-size: 1.5rem; /* Sesuaikan ukuran ikon jika diperlukan */
+                color: #343a40; /* Warna ikon */
+            }
+
+
         }
     </style>
     @yield('styles')
@@ -73,11 +115,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    @if(auth()->check() && auth()->user()->is_admin)
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.materials.index') }}">Admin Panel</a>
-                        </li>
-                    @endif
+                    <!-- Normal Navigation Links -->
                     <li class="nav-item">
                         <a class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
                     </li>
@@ -90,14 +128,37 @@
                     <li class="nav-item">
                         <a class="nav-link {{ Request::routeIs('materials.index') ? 'active' : '' }}" href="{{ route('materials.index') }}">Materi</a>
                     </li>
+    
                     @auth
+                        <!-- Notification Icon -->
                         <li class="nav-item me-2">
-                            <a class="nav-link" href="{{ route('notifications.index') }}" role="button">
-                                <i class="bi bi-bell"></i>
-                            </a>
+                            @if($unreadNotifications > 0)
+                                <a href="{{ route('notifications.index') }}" class="nav-link position-relative">
+                                    <img src="{{ asset('images/app/isNotif.png') }}" alt="Notification Icon">
+                                </a>
+                            @else
+                                <a href="{{ route('notifications.index') }}" class="nav-link position-relative">
+                                    <img src="{{ asset('images/app/noNotif.png') }}" alt="Notification Icon">
+                                </a>
+                            @endif
                         </li>
+    
+                        <!-- Admin Dropdown -->
+                        @if(auth()->user()->is_admin)
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin Panel
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
+                                    <li><a class="dropdown-item" href="{{ route('admin.materials.index') }}">Materi</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.material-categories.index') }}">Kategori</a></li>
+                                </ul>
+                            </li>
+                        @endif
+    
+                        <!-- User Profile Dropdown -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 @if(auth()->user()->avatar)
                                     <img src="{{ route('avatar.show', auth()->user()->id) }}" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
                                 @else
@@ -105,7 +166,7 @@
                                 @endif
                                 {{ auth()->user()->name }}
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item" href="{{ route('profile.index') }}"><i class="bi bi-person"></i> Profil Saya</a></li>
                                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-gear"></i> Ubah Profil</a></li>
                                 <li><hr class="dropdown-divider"></li>
@@ -126,6 +187,7 @@
             </div>
         </div>
     </nav>
+    
 
     <div class="content-wrapper">
         @yield('content')

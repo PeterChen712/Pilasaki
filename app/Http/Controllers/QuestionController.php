@@ -120,16 +120,17 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        $this->authorize('update', $question);
-
         $validated = $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
         ]);
 
         $question->update($validated);
 
-        return redirect()->route('diskusi.questions.show', $question)->with('success', 'Pertanyaan berhasil diperbarui.');
+        return response()->json([
+            'success' => true,
+            'question' => $question
+        ]);
     }
 
     public function destroy(Question $question)

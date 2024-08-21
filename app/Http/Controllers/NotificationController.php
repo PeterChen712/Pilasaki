@@ -6,28 +6,12 @@ use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 
 class NotificationController extends Controller
 {
-    // public function index()
-    // {
-    //     $user = auth()->user();
-
-    //     if (!$user) {
-    //         return redirect()->route('login')->with('error', 'Anda harus masuk untuk melihat notifikasi.');
-    //     }
-
-    //     // Pastikan bahwa user memiliki relasi 'notifications'
-    //     if (method_exists($user, 'notifications')) {
-    //         $notifications = $user->notifications()->latest()->paginate(10);
-
-    //         return view('notifications.index', compact('notifications'));
-    //     } else {
-    //         return redirect()->route('dashboard')->with('error', 'Tidak dapat mengakses notifikasi.');
-    //     }
-    // }
 
     public function index()
     {
@@ -40,10 +24,14 @@ class NotificationController extends Controller
                             ->latest()
                             ->paginate(10);
 
-        return view('notifications.index', compact('notifications'));
+        // Hitung jumlah notifikasi yang belum dibaca
+        $unreadNotifications = DB::table('notifications')
+                                ->where('user_id', $user->id)
+                                ->where('is_read', false)
+                                ->count();
+
+        return view('notifications.index', compact('notifications', 'unreadNotifications'));
     }
-
-
 
 
     public function markAsRead(Notification $notification)
@@ -65,6 +53,13 @@ class NotificationController extends Controller
         }
 
         return redirect()->route('notifications.index')->with('success', 'Notifikasi telah dihapus.');
+    }
+
+    // tanda baca semua notifikasi
+    public function someFunction()
+    {
+        $unreadNotifications = Auth::user()->unreadNotifications->count();
+        return view('someview', compact('unreadNotifications'));
     }
 
 

@@ -39,18 +39,13 @@ class AnswerController extends Controller
             return redirect()->back()->with('error', 'Anda tidak berwenang untuk menerima jawaban ini.');
         }
 
-        Notification::create([
-            'user_id' => $answer->user_id,
-            'title' => 'Jawaban Anda Diterima',
-            'message' => 'Jawaban Anda untuk pertanyaan "'.$answer->question->title.'" telah diterima sebagai solusi.',
-        ]);
-
         // Update the answer
         $answer->is_accepted = true;
         $answer->save();
 
         // Update the question status
         $question = $answer->question;
+
         $question->status = Question::STATUS_SELESAI;
         $question->save();
 
@@ -59,7 +54,16 @@ class AnswerController extends Controller
         $answerUser->points += 15;
         $answerUser->save();
 
+        // Buat notifikasi
+        Notification::create([
+            'user_id' => $answer->user_id,
+            'title' => 'Jawaban Anda Diterima' . $answer->question_id,
+            'message' => 'Jawaban Anda untuk pertanyaan "'.$answer->question->title.'" telah diterima sebagai solusi.',
+            'related_question_id' => $answer->question_id,
+        ]);
+
         return redirect()->route('diskusi.questions.show', $question)
                         ->with('success', 'Jawaban diterima sebagai solusi.');
     }
+
 }

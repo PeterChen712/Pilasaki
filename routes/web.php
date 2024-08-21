@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Log; 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
@@ -20,13 +21,11 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CKEditorController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TestController;
 
 
 // Home & Static Pages
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/about', [AboutController::class, 'index'])->name('about');
-Route::get('/guide', [GuideController::class, 'index'])->name('guide');
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/klasifikasi', [KlasifikasiController::class, 'index'])->name('klasifikasi');
 Route::get('/prediction', [PredictionController::class, 'index'])->name('prediction');
 
@@ -58,15 +57,15 @@ Route::put('/questions/{question}', [QuestionController::class, 'update'])->name
 Route::delete('/questions/{question}', [QuestionController::class, 'destroy'])->name('questions.destroy');
 Route::post('questions/{question}/answers', [AnswerController::class, 'store'])->name('answers.store');
 Route::post('answers/{answer}/accept', [AnswerController::class, 'accept'])->name('answers.accept');
+ 
 
-// Profile Routes (Protected)
+
 Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'editProfile'])->name('profile.edit');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/avatar/{id}', [ProfileController::class, 'showAvatar'])->name('avatar.show');
-
 });
 
 
@@ -94,4 +93,9 @@ Route::get('/game', function () {
 Route::get('/test', function () {
     return view('test');
 });
+
+
+Route::get('/test-accept', [TestController::class, 'showAcceptTest']);
+Route::post('/test-accept', [TestController::class, 'accept']);
+
 

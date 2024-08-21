@@ -17,6 +17,7 @@ class ProfileController extends Controller
 {
     public function index()
     {
+
         $user = Auth::user();
     
         $activities = Activity::where('user_id', $user->id)->latest()->get();
@@ -45,9 +46,21 @@ class ProfileController extends Controller
     }
 
     // Method to display the edit profile page
-    public function edit()
+    public function editProfile()
     {
+        Log::info('Masuk ke method edit di ProfileController');
+
         $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->route('login');
+        }
+        
+        // Jika Anda menggunakan policy
+        // if (!auth()->user()->can('edit', $user)) {
+        //     abort(403);
+        // }
+        
         return view('profile.edit', compact('user'));
     }
 
@@ -67,7 +80,7 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         if (!$user instanceof User) {
-            return redirect()->route('profile')->with('error', 'Invalid user.');
+            return redirect()->route('profile.index')->with('error', 'Invalid user.');
         }
 
         $user->name = $request->name;
@@ -102,7 +115,7 @@ class ProfileController extends Controller
         $user->save();
         Log::info('User after update:', $user->toArray());
 
-        return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()->route('profile.index')->with('success', 'Profil berhasil diperbarui.');
     }
 
     public function showAvatar($id)
