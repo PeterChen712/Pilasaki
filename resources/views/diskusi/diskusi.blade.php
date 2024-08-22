@@ -1,7 +1,7 @@
 <!-- resources/views/diskusi.blade.php -->
 @extends('layouts.app')
 
-@section('title', 'Diskusi - Forum Programmer')
+@section('title', 'Forum Diskusi')
 
 @section('styles')
 <style>
@@ -183,7 +183,11 @@
                     <h4>Top user</h4>
                     @foreach($topUsers as $user)
                         <div class="coder">
-                            <img src="{{ $user->avatar ?? 'https://via.placeholder.com/40' }}" alt="{{ $user->name }}" width="40" height="40">
+                            @if ($loop->first)
+                                <img src="{{ route('avatar.show', auth()->user()->id) }}" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
+                            @else
+                                <img src="{{ $user->avatar ?? 'https://via.placeholder.com/40' }}" alt="{{ $user->name }}" width="40" height="40">
+                            @endif
                             <span>{{ $user->name }} - {{ $user->points }} Point</span>
                         </div>
                     @endforeach

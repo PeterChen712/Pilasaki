@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Login - Forum Programmer')
+@section('title', 'Login Page')
 
 @section('styles')
 <style>
@@ -11,7 +11,15 @@
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-color: #f4f7f6; /* fallback color */
+        font-family: 'Nunito', sans-serif;
     }
+
+    .login-header img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 15px;
+    }
+
     .login-container {
         max-width: 400px;
         margin: 50px auto;
@@ -127,7 +135,7 @@
 <div class="container">
     <div class="login-container">
         <div class="login-header">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo">
+            <img src="{{ asset('images/login/logo.png') }}" alt="Logo">
             <h2>Login</h2>
             <p>Selamat datang ke PISAH</p>
         </div>
