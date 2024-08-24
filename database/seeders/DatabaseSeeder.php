@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\WasteCategory;
 use Illuminate\Database\Seeder;
 
@@ -14,6 +15,7 @@ class DatabaseSeeder extends Seeder
             MaterialSeeder::class,
             AdminUserSeeder::class,
             WasteCategoriesSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

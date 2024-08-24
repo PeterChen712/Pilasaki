@@ -4,6 +4,11 @@
 
 @section('styles')
 <style>
+    body {
+        background: linear-gradient(135deg, #114B5F, #1A946F, #88D398, #F3E8D2);
+        min-height: 100vh;
+        margin: 0;
+    }
     .guidelines {
         background-color: #f9f9f9;
         padding: 30px;
@@ -64,7 +69,7 @@
         <p>Dengan mengikuti peraturan di atas, Anda membantu menciptakan lingkungan diskusi yang positif dan bermanfaat bagi semua anggota. Terima kasih atas kerjasamanya!</p>
     </div>
     <div class="back-link">
-        <a href="{{ route('diskusi') }}">← Kembali ke Forum Diskusi</a>
+        <button style="background-color: green; color: white;" onclick="window.location.href='{{ route('diskusi') }}'">← Kembali ke Forum Diskusi</button>
     </div>
 </div>
 @endsection

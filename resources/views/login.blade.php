@@ -11,7 +11,7 @@
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-color: #f4f7f6; /* fallback color */
-        font-family: 'Nunito', sans-serif;
+        /* font-family: 'Nunito', sans-serif; */
     }
 
     .login-header img {
@@ -135,7 +135,7 @@
 <div class="container">
     <div class="login-container">
         <div class="login-header">
-            <img src="{{ asset('images/login/logo.png') }}" alt="Logo">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo">
             <h2>Login</h2>
             <p>Selamat datang ke PISAH</p>
         </div>

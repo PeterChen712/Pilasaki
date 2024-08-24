@@ -28,7 +28,7 @@ use App\Http\Controllers\TestController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/klasifikasi', [KlasifikasiController::class, 'index'])->name('klasifikasi');
 Route::get('/prediction', [PredictionController::class, 'index'])->name('prediction');
-
+Route::get('/waste-category/{className}', [WasteCategoryController::class, 'getCategoryInfo'])->name('waste-category.getCategoryInfo');
 // Authentication Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
@@ -97,5 +97,6 @@ Route::get('/test', function () {
 
 Route::get('/test-accept', [TestController::class, 'showAcceptTest']);
 Route::post('/test-accept', [TestController::class, 'accept']);
+
 
 

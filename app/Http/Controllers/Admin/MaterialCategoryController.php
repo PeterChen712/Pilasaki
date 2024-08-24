@@ -17,6 +17,21 @@ class MaterialCategoryController extends Controller
         return view('admin.material-categories.index', compact('categories'));
     }
 
+    public function showPhoto($id)
+    {
+        $category = MaterialCategory::findOrFail($id);
+
+        if ($category->photo) {
+            return response()->make(base64_decode($category->photo), 200, [
+                'Content-Type' => 'image/jpeg',
+                'Content-Disposition' => 'inline; filename="' . $category->slug . '.jpg"',
+            ]);
+        }
+
+        return response()->json(['message' => 'Photo not found.'], 404);
+    }
+
+
 
     public function create()
     {

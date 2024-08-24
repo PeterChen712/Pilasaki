@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section('title', 'Diskusi')
+
+@section('styles')
+
+
 @section('content')
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 

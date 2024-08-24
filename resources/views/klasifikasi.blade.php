@@ -4,6 +4,15 @@
 
 @section('styles')
 <style>
+    body {
+        background: linear-gradient(135deg, #114B5F, #1A946F, #88D398, #F3E8D2);
+        min-height: 100vh;
+        margin: 0;
+    }
+
+  /* body {
+    background-image: linear-gradient(to bottom right, #11998e, #38ef7d);
+} */
     .upload-area {
         border: 2px dashed #ccc;
         border-radius: 8px;
@@ -174,8 +183,18 @@
 
 @section('content')
 <div class="container py-5">
-    <h1 class="mb-4">Klasifikasi Sampah</h1>
-    <p class="lead mb-5">Unggah foto sampah dan sistem kami akan mengklasifikasikannya untuk Anda.</p>
+    <div class="text-center">
+        <h1 class="mb-4" style="color: white"><strong>Klasifikasi Sampah</strong></h1>
+        <p class="lead mb-2" style="color: white">Unggah foto sampah dan sistem kami akan mengklasifikasikannya untuk Anda.</p>
+    </div>
+    <section id="view-gif" class="py-5">
+        <div class="container text-center">
+            <div class="gif-container">
+                <img src="{{ asset('images/home/klas.gif') }}" alt="Dampak Klasifikasi Sampah" class="img-fluid rounded shadow" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+    </section>
+
 
     <div class="layout-container">
         <div class="upload-section">
@@ -258,6 +277,10 @@
         const loadingSpinner = document.querySelector('.loading-spinner');
         let classificationChart;
 
+        // Disable classify button initially
+        classifyButton.classList.add('disabled-button');
+        classifyButton.disabled = true;
+
         // Trigger file input when clicking on drop area
         dropArea.addEventListener('click', () => fileInput.click());
 
@@ -339,7 +362,7 @@
         }
 
         cancelIconContainer.addEventListener('click', function(e) {
-            e.stopPropagation(); // Prevent triggering the dropArea click event
+            e.stopPropagation(); 
             fileInput.value = '';
             previewImage.style.display = 'none'; 
             previewImage.src = '';

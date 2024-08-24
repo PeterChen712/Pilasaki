@@ -5,6 +5,11 @@
 
 @section('styles')
 <style>
+    body {
+        background: linear-gradient(135deg, #114B5F, #1A946F, #88D398, #F3E8D2);
+        min-height: 100vh;
+        margin: 0;
+    }
     .welcome-box {
         background-color: #e0f7fa;
         padding: 20px;
@@ -71,6 +76,8 @@
 
     .top-coder {
         margin-top: 20px;
+        padding-left: 20px; 
+        padding-bottom: 20px;
     }
 
     .top-coder h4 {
@@ -133,7 +140,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8" style="margin-top: 20px;">
             <div class="welcome-box">
                 <h2>Selamat datang di Forum Diskusi!</h2>
                 <p>Ayo Bantu selesaikan kendala untuk mendapatkan point dan peringkat di forum :)</p>
@@ -141,10 +148,15 @@
             </div>
             <div class="discussion-list">
                 @foreach($questions as $question)
-                    <div class="discussion-item">
+                    <div class="discussion-item" style="background-color: white">
                         <div class="details">
-                            <h5><a href="{{ route('diskusi.questions.show', $question) }}">{{ $question->title }}</a></h5>
-                            <p>{{ $question->user->name }} • {{ $question->created_at->diffForHumans() }}</p>
+                            <h5>
+                                <span class="badge bg-success text-white">
+                                    <a href="{{ route('diskusi.questions.show', $question) }}" style="color: white">{{ $question->title }}</a>
+                                </span>
+                            </h5>
+                            <p>{{ optional($question->user)->name ?? 'Anonymous' }} • {{ $question->created_at->diffForHumans() }}</p>
+                            {{-- <p>{{ $question->user->name }} • {{ $question->created_at->diffForHumans() }}</p> --}}
                         </div>
                         <div class="meta">
                             <div class="views">{{ $question->view_count ?? 0 }}</div>
@@ -161,7 +173,7 @@
         </div>
         <div class="col-md-4">
             <div class="sidebar">
-                <div class="nav flex-column">
+                <div class="nav flex-column" style="background: white; border-radius: 5px;">
                     @auth
                         <a href="{{ route('questions.create') }}" class="nav-link create-question-btn">
                             <span class="nav-icon">✏️</span> Buat Pertanyaan
@@ -179,18 +191,18 @@
                     <a href="{{ route('diskusi', ['status' => 'belum_terjawab']) }}" class="nav-link"><span class="nav-icon">❓</span> Belum Terjawab</a>
                     <a href="{{ route('diskusi', ['sort' => 'view_count']) }}" class="nav-link"><span class="nav-icon">👁️</span> Paling Banyak Dilihat</a>
                 </div>
-                <div class="top-coder">
+                <div class="top-coder" style="background-color: white">
                     <h4>Top user</h4>
-                    @foreach($topUsers as $user)
-                        <div class="coder">
-                            @if ($loop->first)
-                                <img src="{{ route('avatar.show', auth()->user()->id) }}" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
-                            @else
-                                <img src="{{ $user->avatar ?? 'https://via.placeholder.com/40' }}" alt="{{ $user->name }}" width="40" height="40">
-                            @endif
-                            <span>{{ $user->name }} - {{ $user->points }} Point</span>
-                        </div>
-                    @endforeach
+                    @if(isset($topUsers) && count($topUsers) > 0)
+                        @foreach($topUsers as $user)
+                            <div class="coder">
+                                <img src="{{ $user->avatar ?? asset('images/user.png') }}" alt="{{ $user->name }}" width="40" height="40">
+                                <span>{{ $user->name }} - {{ $user->points }} Point</span>
+                            </div>
+                        @endforeach
+                    @else
+                        <p>Belum ada user terbaik</p>
+                    @endif
                 </div>
             </div>
         </div>

@@ -33,7 +33,7 @@
     }
 
     .join-button {
-        background-color: #ff7f50;
+        background-color: green;
         color: white;
         padding: 10px 20px;
         border: none;
@@ -245,15 +245,16 @@
 @endsection
 
 @section('content')
+
 <header class="jumbotron" id="beranda">
-    <div class="gradient" id="parallax-container">
+    <div class="gradient" id="parallax-container" style="background: #114B5F;">
         <div class="content">
-            <h1>Selamatkan Bumi<br>Recycle Waste With Us</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lorem dui, porttitor eget imperdiet eu, sagittis a purus</p>
-            <button class="join-button">Join</button>
+            <h1>Selamatkan Bumi<br>Kelola sampah kita</h1>
+            <p>Bersama-sama, kita dapat menciptakan perubahan positif untuk lingkungan. Mari belajar memilah sampah dan berkontribusi pada masa depan yang lebih hijau!</p>
+            <button class="join-button">Gabung</button>
         </div>
         <img src="images/home/model.png" alt="Recycle Bin" class="recycle-bin">
-        
+       
         <!-- Leaves around the header -->
         <div class="leaf" style="top: 10%; left: 5%;"></div>
         <div class="leaf" style="top: 20%; right: 10%; transform: rotate(45deg);"></div>
@@ -270,7 +271,7 @@
 </header>
 
 
-<section id="statistik" class="py-5">
+<section id="statistik" class="py-5" style="background: #1A946F">
     <div class="container">
         <h2 class="text-center mb-5">Dampak Pemilahan Sampah</h2>
         <div class="row">
@@ -304,7 +305,8 @@
 
 
 
-<section id="panduan" class="py-5 info-section">
+
+<section id="panduan" class="py-5 info-section" style="background: #88D398">
     <div class="container">
         <h2 class="text-center mb-5">Panduan Pemilahan Sampah</h2>
         <div class="row">
@@ -361,8 +363,7 @@
 </section>
 
 
-
-<section id="dampak" class="py-5 impact-section bg-light">
+<section id="dampak" class="py-5 impact-section bg-light" style="background: #F3E8D2 !important">
     <div class="container">
         <h2 class="text-center mb-5">Dampak Pengelolaan Sampah yang Baik</h2>
         <div class="row text-center">
@@ -404,12 +405,12 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-6">
-                <img src="{{ asset('images/about-illustration.jpg') }}" alt="Tentang Kami" class="img-fluid rounded">
+                <img src="{{ asset('images/logo.png') }}" alt="Tentang Kami" class="img-fluid rounded">
             </div>
             <div class="col-md-6">
                 <h2 class="mb-4">Tentang Kami</h2>
-                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lorem dui, porttitor eget imperdiet eu, sagittis a purus. Donec nec nunc nec nunc.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut lorem dui, porttitor eget imperdiet eu, sagittis a purus. Donec nec nunc nec nunc.</p>
+                <p class="lead">Kami adalah komunitas yang berdedikasi untuk mendidik dan menginspirasi masyarakat tentang pentingnya pemilahan sampah dan pengelolaan limbah yang bertanggung jawab.</p>
+                <p>Melalui edukasi, aksi nyata, dan kolaborasi dengan berbagai pihak, kami berupaya menciptakan lingkungan yang lebih bersih, sehat, dan berkelanjutan. Bergabunglah dengan kami dalam perjalanan menuju Indonesia bebas sampah!</p>
             </div>
         </div>
     </div>

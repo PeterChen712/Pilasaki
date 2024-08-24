@@ -15,7 +15,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            padding-top: 56px; /* Adjust this value based on your navbar height */
+            padding-top: 56px;
         }
         .feature-icon {
             font-size: 3rem;
@@ -23,7 +23,7 @@
         }
         .content-wrapper {
             flex: 1 0 auto;
-            padding-bottom: 60px; /* Adjust this value based on your footer height */
+            padding-bottom: 60px; 
         }
         .footer {
             flex-shrink: 0;
@@ -58,47 +58,47 @@
             }
             .navbar-collapse.show {
                 height: auto;
-                max-height: calc(100vh - 56px); /* Adjust based on navbar height */
+                max-height: calc(100vh - 56px); 
                 overflow-y: auto;
             }
 
             .nav-item {
-                margin-left: 15px; /* Atur jarak antar item navbar */
+                margin-left: 15px; 
             }
 
             .nav-item.me-2 {
-                margin-right: 15px; /* Atur jarak untuk item notifikasi khusus */
+                margin-right: 15px; 
             }
 
             .nav-link {
-                padding-right: 10px; /* Mengatur padding kanan untuk memberi ruang antara elemen */
+                padding-right: 10px; 
             }
 
             .navbar .fas.fa-bell {
-                font-size: 1.2rem; /* Atur ukuran ikon lonceng */
-                vertical-align: middle; /* Sejajarkan ikon dengan teks lainnya */
+                font-size: 1.2rem; 
+                vertical-align: middle; 
             }
 
 
             .navbar .fas.fa-bell {
-                font-size: 1.2rem; /* Ukuran ikon lonceng */
-                vertical-align: middle; /* Sejajarkan dengan teks */
+                font-size: 1.2rem; 
+                vertical-align: middle; 
                 position: relative;
             }
 
             .navbar .badge {
-                font-size: 0.75rem; /* Ukuran teks pada badge */
-                padding: 0.3em 0.4em; /* Ukuran badge */
+                font-size: 0.75rem; 
+                padding: 0.3em 0.4em; 
                 position: absolute;
-                top: -5px; /* Sesuaikan jarak vertikal */
-                right: -10px; /* Sesuaikan jarak horizontal */
-                transform: translate(50%, -50%); /* Memperbaiki posisi badge */
+                top: -5px; 
+                right: -10px;
+                transform: translate(50%, -50%); 
                 transform-origin: center;
             }
 
             .bi-bell-fill {
-                font-size: 1.5rem; /* Sesuaikan ukuran ikon jika diperlukan */
-                color: #343a40; /* Warna ikon */
+                font-size: 1.5rem; 
+                color: #343a40;
             }
 
 
@@ -109,8 +109,8 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-
-            <a class="navbar-brand" href="{{ route('home') }}">PIilah sampah kita</a>
+            <img src="{{ asset('images/logo.png') }}" alt="PilahSampah" width="32" height="32">
+            <a class="navbar-brand" href="{{ route('home') }}">PILASAKI'</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -151,7 +151,7 @@
                                     Admin Panel
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
-                                    <li><a class="dropdown-item" href="{{ route('admin.materials.index') }}">Materi</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.materials.index') }}">Artikel</a></li>
                                     <li><a class="dropdown-item" href="{{ route('admin.material-categories.index') }}">Kategori</a></li>
                                 </ul>
                             </li>
@@ -163,7 +163,7 @@
                                 @if(auth()->user()->avatar)
                                     <img src="{{ route('avatar.show', auth()->user()->id) }}" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
                                 @else
-                                    <img src="https://via.placeholder.com/32" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
+                                    <img src="images/user.png" alt="{{ auth()->user()->name }}" class="rounded-circle me-2" width="32" height="32">
                                 @endif
                                 {{ auth()->user()->name }}
                             </a>
@@ -195,7 +195,7 @@
     </div>
 
     <footer class="footer">
-        <p>&copy; 2024 PilahSampah. Hak Cipta Dilindungi.</p>
+        <p>&copy; 2024 PilahSampahKita. Hak Cipta Dilindungi.</p>
     </footer>
 
     <!-- Crop Image Modal -->
