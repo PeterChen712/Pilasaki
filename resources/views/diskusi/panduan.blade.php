@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('title', 'Panduan Forum Diskusi')
-
 @section('styles')
 <style>
     body {
@@ -15,40 +13,37 @@
         border-radius: 5px;
         margin-top: 20px;
     }
-
     .guidelines h2 {
         margin-bottom: 20px;
     }
-
     .guidelines ul {
         list-style-type: disc;
         padding-left: 20px;
     }
-
     .guidelines li {
         margin-bottom: 10px;
     }
-
     .guidelines .important {
         color: #d9534f;
         font-weight: bold;
     }
-
     .back-link {
         margin-top: 20px;
     }
-
-    .back-link a {
-        color: #007bff;
-        text-decoration: none;
+    .back-link button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
     }
-
-    .back-link a:hover {
-        text-decoration: underline;
+    .back-link button:hover {
+        background-color: #218838;
     }
 </style>
 @endsection
-
 @section('content')
 <div class="container">
     <div class="guidelines">
@@ -69,7 +64,7 @@
         <p>Dengan mengikuti peraturan di atas, Anda membantu menciptakan lingkungan diskusi yang positif dan bermanfaat bagi semua anggota. Terima kasih atas kerjasamanya!</p>
     </div>
     <div class="back-link">
-        <button style="background-color: green; color: white;" onclick="window.location.href='{{ route('diskusi') }}'">← Kembali ke Forum Diskusi</button>
+        <button onclick="window.location.href='{{ route('diskusi') }}'">← Kembali ke Forum Diskusi</button>
     </div>
 </div>
 @endsection

@@ -4,7 +4,7 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('materials.index') }}">Materi</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('materials.index') }}">Artikel</a></li>
             <li class="breadcrumb-item"><a href="{{ route('materials.category', $material->category->slug) }}">{{ $material->category->name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ $material->title }}</li>
         </ol>
@@ -28,7 +28,7 @@
         <div class="col-md-4">
             <div class="card mb-4">
                 <div class="card-body">
-                    <h3 class="card-title">Tentang Materi Ini</h3>
+                    <h3 class="card-title">Tentang Artikel Ini</h3>
                     <p><strong>Kategori:</strong> {{ $material->category->name }}</p>
                     <p><strong>Terakhir Diperbarui:</strong> {{ $material->updated_at->format('d F Y') }}</p>
                 </div>

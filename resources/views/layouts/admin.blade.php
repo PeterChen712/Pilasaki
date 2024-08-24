@@ -28,7 +28,7 @@
                         <a class="nav-link {{ Request::routeIs('.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Dashboard</a>
                     </li> 
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::routeIs('admin.materials.index') ? 'active' : '' }}" href="{{ route('admin.materials.index') }}">Materi</a>
+                        <a class="nav-link {{ Request::routeIs('admin.materials.index') ? 'active' : '' }}" href="{{ route('admin.materials.index') }}">Artikel</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ Request::routeIs('admin.material-categories.index') ? 'active' : '' }}" href="{{ route('admin.material-categories.index') }}">Kategori</a>

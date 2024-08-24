@@ -39,7 +39,7 @@ class MaterialController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('admin.materials.index')->with('success', 'Materi berhasil ditambahkan.');
+        return redirect()->route('admin.materials.index')->with('success', 'Artikel berhasil ditambahkan.');
     }
 
     public function edit(Material $material)
@@ -65,12 +65,12 @@ class MaterialController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        return redirect()->route('admin.materials.index')->with('success', 'Materi berhasil diperbarui.');
+        return redirect()->route('admin.materials.index')->with('success', 'Artikel berhasil diperbarui.');
     }
 
     public function destroy(Material $material)
     {
         $material->delete();
-        return redirect()->route('admin.materials.index')->with('success', 'Materi berhasil dihapus.');
+        return redirect()->route('admin.materials.index')->with('success', 'Artikel berhasil dihapus.');
     }
 }

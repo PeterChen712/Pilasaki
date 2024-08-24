@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Tambah Materi Baru')
+@section('title', 'Tambah Artikel Baru')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Tambah Materi Baru</h1>
+    <h1 class="mb-4">Tambah Artikel Baru</h1>
 
     <form action="{{ route('admin.materials.store') }}" method="POST" enctype="multipart/form-data">
         @csrf

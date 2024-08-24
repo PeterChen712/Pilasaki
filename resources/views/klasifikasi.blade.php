@@ -221,7 +221,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" id="classify-button" class="btn btn-primary w-100 disabled-button" disabled>Klasifikasikan</button>
+                            <button type="submit" id="classify-button" class="btn btn-success w-100 disabled-button custom-green-button" disabled>Klasifikasikan</button>
                         </form>
                     </div>
                 </div>

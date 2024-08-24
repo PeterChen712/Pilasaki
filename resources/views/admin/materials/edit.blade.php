@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Materi')
+@section('title', 'Edit Artikel')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Edit Materi</h1>
+    <h1 class="mb-4">Edit Artikel</h1>
 
     <form action="{{ route('admin.materials.update', $material) }}" method="POST">
         @csrf

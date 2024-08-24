@@ -41,6 +41,9 @@
         font-size: 1em;
         cursor: pointer;
     }
+    .join-button:hover {
+        background-color: darkgreen;
+    }
 
     .recycle-bin {
         position: absolute;
@@ -251,7 +254,7 @@
         <div class="content">
             <h1>Selamatkan Bumi<br>Kelola sampah kita</h1>
             <p>Bersama-sama, kita dapat menciptakan perubahan positif untuk lingkungan. Mari belajar memilah sampah dan berkontribusi pada masa depan yang lebih hijau!</p>
-            <button class="join-button">Gabung</button>
+            <button onclick="window.location.href='{{ route('login') }}'" class="join-button">Gabung</button>
         </div>
         <img src="images/home/model.png" alt="Recycle Bin" class="recycle-bin">
        

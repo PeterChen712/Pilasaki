@@ -1,11 +1,11 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Materi')
+@section('title', 'Kelola Artikel')
 
 @section('content')
 <div class="container">
-    <h1 class="mb-4">Kelola Materi</h1>
-    <a href="{{ route('admin.materials.create') }}" class="btn btn-primary mb-3">Tambah Materi Baru</a>
+    <h1 class="mb-4">Kelola Artikel</h1>
+    <a href="{{ route('admin.materials.create') }}" class="btn btn-primary mb-3">Tambah Artikel Baru</a>
 
     <table class="table table-striped">
         <thead>
