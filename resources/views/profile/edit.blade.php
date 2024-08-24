@@ -2,6 +2,31 @@
 
 @section('title', 'Edit Profil')
 
+@section('styles')
+<style>
+    body {
+        background: linear-gradient(135deg, #114B5F, #1A946F, #88D398, #F3E8D2);
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .card {
+        border-radius: 10px;
+    }
+
+    .avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+    }
+
+    .icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

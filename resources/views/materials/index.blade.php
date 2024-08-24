@@ -33,7 +33,9 @@
                 @foreach($categories as $category)
                 <div class="col-md-6 mb-4">
                     <div class="card h-100">
-                        <img src="{{ $category->image_url }}" class="card-img-top" alt="{{ $category->name }}">
+                        <img src="{{ asset('images/kategori/' . $category->slug . '.png') }}" class="card-img-top" alt="{{ $category->name }}" style="width: 100%; height: 200px; object-fit: cover;">
+                        {{-- <img src="{{ $category->image_url }}" class="card-img-top" alt="{{ $category->name }}" style="width: 100%; height: 200px; object-fit: cover;"> --}}
+                        {{-- <img src="{{ $category->image_url }}" class="card-img-top" alt="{{ $category->name }}"> --}}
                         <div class="card-body">
                             <h5 class="card-title">{{ $category->name }}</h5>
                             <p class="card-text">{{ $category->description }}</p>
@@ -80,8 +82,11 @@
         </div>
     </div>
     <!-- List Materi -->
+    <div>
+        <h2 class="mb-4 text-center" style="color: white"><strong>Artikel Terbaru</strong></h2>
+    </div>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-15">
             @foreach($materials as $material)
                 <div class="card mb-4">
                     <div class="card-body">
