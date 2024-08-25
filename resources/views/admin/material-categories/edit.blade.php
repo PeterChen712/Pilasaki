@@ -224,26 +224,74 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function(e) {
-            if (croppedAvatarInput.value) {
-                // Jika ada gambar yang di-crop, tidak perlu melakukan apa-apa lagi
-                return;
-            }
+            e.preventDefault();
             if (cropper) {
-                e.preventDefault();
                 cropper.getCroppedCanvas({
                     width: 300,
                     height: 300
                 }).toBlob(function(blob) {
-                    const fileReader = new FileReader();
-                    fileReader.onload = function(e) {
-                        croppedAvatarInput.value = e.target.result;
-                        form.submit();
-                    };
-                    fileReader.readAsDataURL(blob);
-                }, 'image/jpeg', 0.8);
+                    const formData = new FormData(form);
+                    formData.delete('avatar'); // Remove the original file input
+                    formData.append('avatar', blob, 'category-image.png');
+                    
+                    fetch('/save-category-image', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Category image saved successfully!');
+                            // Optionally redirect or update UI
+                        } else {
+                            alert('Error saving category image: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while saving the image.');
+                    });
+                }, 'image/png', 1);
             }
         });
     }
+    const express = require('express');
+    const multer = require('multer');
+    const path = require('path');
+    const fs = require('fs');
+
+    const app = express();
+
+    // Konfigurasi penyimpanan multer
+    const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const dir = path.join(__dirname, 'public', 'images', 'kategori');
+        if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
+    },
+    filename: function (req, file, cb) {
+        const categoryName = req.body.categoryName || 'default';
+        cb(null, `${categoryName}.png`);
+    }
+    });
+
+    const upload = multer({ storage: storage });
+
+    app.post('/save-category-image', upload.single('avatar'), (req, res) => {
+    if (req.file) {
+        res.json({ success: true, filename: req.file.filename });
+    } else {
+        res.status(400).json({ success: false, error: 'No file uploaded' });
+    }
+    });
+    // ... kode server lainnya
+
+    app.listen(3000, () => {
+    console.log('Server running on port 3000');
+    });
+
 });
 </script>
 @endsection
