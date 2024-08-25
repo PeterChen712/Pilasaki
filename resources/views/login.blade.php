@@ -74,12 +74,12 @@
         font-size: 16px;
         font-weight: 600;
         border-radius: 5px;
-        background-color: #007bff;
-        border-color: #007bff;
+        background-color: green;
+        border-color: green;
     }
     .login-form .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
+        background-color: darkgreen;
+        border-color: darkgreen;
     }
     .login-divider {
         text-align: center;
@@ -173,7 +173,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <button type="submit" class="btn btn-primary btn-success btn-block">Login</button>
             </div>
         </form>
         <div class="text-center mt-3">

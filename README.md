@@ -1,4 +1,4 @@
-# Proyek Laravel 
+# PILASAKI'
 
 ## Langkah-langkah Instalasi
 
@@ -27,28 +27,26 @@
     php artisan key:generate
     ```
 
-## Langkah-langkah Setup Database MySQL
-
-1. Aktifkan XAMPP seperti pada gambar ini
+6. Aktifkan XAMPP seperti pada gambar ini
     ![XAMPP](README/step1.png)
 
-2. Buka phpMyAdmin di browser:
-    [http://localhost/phpmyadmin/](http://localhost/phpmyadmin/)
-
-3. Klik menu 'Databases' dan buat database `pisah` seperti pada gambar dan klik 'create':
-    ![DB](README/step2.png)
-
-4. Jalankan perintah ini di terminal:
+7. Jalankan perintah ini di terminal:
     ```bash
     php artisan migrate
     ```
 
-5. Selanjutnya jalankan perintah ini:
+8. Jika ada pesan seperti ini:
+    > The database 'pisah' does not exist on the 'mysql' connection. Would you like to create it? (yes/no) [yes]
+    
+    klik enter
+
+
+9. Selanjutnya jalankan perintah ini:
     ```bash
     php artisan db:seed
     ```
 
-6. Atur file `.env` sesuai konfigurasi berikut:
+10. Atur file `.env` sesuai konfigurasi berikut:
     ```env
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
@@ -58,10 +56,10 @@
     DB_PASSWORD=
     ```
 
-7. Jalankan server Laravel:
+11. Jalankan server Laravel:
     ```bash
     php artisan serve
     ```
 
-8. Buka aplikasi di browser:
+12. Buka aplikasi di browser:
     [http://localhost:8000](http://localhost:8000)

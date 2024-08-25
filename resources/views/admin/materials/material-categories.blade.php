@@ -1,4 +1,4 @@
-@extends('admin')
+@extends('layouts.app')
 
 @section('title', 'Material Categories - PilahSampah')
 

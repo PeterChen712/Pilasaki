@@ -39,7 +39,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $category->name }}</h5>
                             <p class="card-text">{{ $category->description }}</p>
-                            <a href="{{ route('materials.category', $category->slug) }}" class="btn btn-green">Lihat Artikel</a>
+                            <a href="{{ route('materials.category', $category->slug) }}" class="btn btn-green">Lihat Kategori</a>
                         </div>
                     </div>
                 </div>

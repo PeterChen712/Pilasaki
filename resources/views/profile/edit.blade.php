@@ -3,6 +3,7 @@
 @section('title', 'Edit Profil')
 
 @section('styles')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <style>
     body {
         background: linear-gradient(135deg, #114B5F, #1A946F, #88D398, #F3E8D2);
@@ -12,6 +13,11 @@
 
     .card {
         border-radius: 10px;
+    }
+    .card-header {
+        background-color: #1A946F;
+        font-weight: bold;
+        text-align: center;text-align: center;
     }
 
     .avatar {
@@ -24,13 +30,46 @@
         font-size: 1.5rem;
         margin-bottom: 0.5rem;
     }
+
+    .password-requirements {
+        position: static;
+        width: 100%;
+        padding: 0.5rem;
+        background-color: #f8d7da;
+        border-radius: 0.25rem;
+        display: none;
+        margin-top: 0.5rem;
+    }
+
+    .password-requirements ul {
+        margin: 0;
+        padding: 0;
+    }
+
+    .password-requirements li {
+        font-size: 0.8rem;
+    }
+
+    .password-requirements li i {
+        margin-right: 0.5rem;
+    }
+
+    .password-requirements li.text-success {
+        color: #155724;
+        background-color: #d4edda;
+    }
+
+    .password-requirements li.text-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+    }
 </style>
 
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-8" style="padding-top: 20px;">
             <div class="card">
                 <div class="card-header">{{ __('Edit Profil') }}</div>
 
@@ -133,6 +172,25 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                            <div class="password-requirements mt-2" style="display: none;">
+                                <ul class="list-unstyled">
+                                    <li id="length" class="text-danger">
+                                        <i class="fas fa-times"></i> Minimal 8 karakter
+                                    </li>
+                                    <li id="uppercase" class="text-danger">
+                                        <i class="fas fa-times"></i> Ada huruf kapital
+                                    </li>
+                                    <li id="lowercase" class="text-danger">
+                                        <i class="fas fa-times"></i> Ada huruf kecil
+                                    </li>
+                                    <li id="number" class="text-danger">
+                                        <i class="fas fa-times"></i> Ada angka
+                                    </li>
+                                    <li id="special" class="text-danger">
+                                        <i class="fas fa-times"></i> Ada karakter spesial
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     
                         <div class="form-group">
@@ -140,7 +198,7 @@
                             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
                         </div>
                     
-                        <button type="submit" class="btn btn-primary">{{ __('Simpan Perubahan') }}</button>
+                        <button type="submit" class="btn btn-success">{{ __('Simpan Perubahan') }}</button>
                     </form>                    
                 </div>
             </div>
@@ -176,102 +234,151 @@
 @section('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const avatarInput = document.getElementById('avatar');
-    const avatarImage = document.getElementById('avatar-image');
-    const avatarPreview = document.getElementById('avatar-preview');
-    const avatarCropContainer = document.getElementById('avatar-crop-container');
-    const avatarPreviewContainer = document.getElementById('avatar-preview-container');
-    const croppedAvatarInput = document.getElementById('cropped-avatar');
-    const cropButton = document.getElementById('crop-button');
-    const editAvatarButton = document.getElementById('edit-avatar-button');
-    let cropper;
+    document.addEventListener('DOMContentLoaded', function () {
+        const avatarInput = document.getElementById('avatar');
+        const avatarImage = document.getElementById('avatar-image');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const avatarCropContainer = document.getElementById('avatar-crop-container');
+        const avatarPreviewContainer = document.getElementById('avatar-preview-container');
+        const croppedAvatarInput = document.getElementById('cropped-avatar');
+        const cropButton = document.getElementById('crop-button');
+        const editAvatarButton = document.getElementById('edit-avatar-button');
+        let cropper;
 
-    function initCropper(imageUrl) {
-        avatarImage.src = imageUrl;
-        avatarCropContainer.style.display = 'block';
-        avatarPreviewContainer.style.display = 'none';
+        function initCropper(imageUrl) {
+            avatarImage.src = imageUrl;
+            avatarCropContainer.style.display = 'block';
+            avatarPreviewContainer.style.display = 'none';
 
-        if (cropper) {
-            cropper.destroy();
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(avatarImage, {
+                aspectRatio: 1,
+                viewMode: 1,
+                minCropBoxWidth: 200,
+                minCropBoxHeight: 200,
+                ready: function() {
+                    this.cropper.crop();
+                }
+            });
         }
 
-        cropper = new Cropper(avatarImage, {
-            aspectRatio: 1,
-            viewMode: 1,
-            minCropBoxWidth: 200,
-            minCropBoxHeight: 200,
-            ready: function() {
-                this.cropper.crop();
-            }
-        });
-    }
-
-    if (avatarInput) {
-        avatarInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    initCropper(event.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-
-    if (cropButton) {
-        cropButton.addEventListener('click', function() {
-            if (cropper) {
-                const croppedCanvas = cropper.getCroppedCanvas({
-                    width: 300,
-                    height: 300
-                });
-                
-                croppedCanvas.toBlob(function(blob) {
-                    const fileReader = new FileReader();
-                    fileReader.onload = function(e) {
-                        croppedAvatarInput.value = e.target.result;
-                        avatarPreview.src = e.target.result;
-                        avatarCropContainer.style.display = 'none';
-                        avatarPreviewContainer.style.display = 'block';
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        initCropper(event.target.result);
                     };
-                    fileReader.readAsDataURL(blob);
-                }, 'image/jpeg', 0.8);
-            }
-        });
-    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
 
-    if (editAvatarButton) {
-        editAvatarButton.addEventListener('click', function() {
-            initCropper(avatarPreview.src);
-        });
-    }
+        if (cropButton) {
+            cropButton.addEventListener('click', function() {
+                if (cropper) {
+                    const croppedCanvas = cropper.getCroppedCanvas({
+                        width: 300,
+                        height: 300
+                    });
+                    
+                    croppedCanvas.toBlob(function(blob) {
+                        const fileReader = new FileReader();
+                        fileReader.onload = function(e) {
+                            croppedAvatarInput.value = e.target.result;
+                            avatarPreview.src = e.target.result;
+                            avatarCropContainer.style.display = 'none';
+                            avatarPreviewContainer.style.display = 'block';
+                        };
+                        fileReader.readAsDataURL(blob);
+                    }, 'image/jpeg', 0.8);
+                }
+            });
+        }
 
-    // Tambahkan event listener untuk form submission
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            if (croppedAvatarInput.value) {
-                // Jika ada gambar yang di-crop, tidak perlu melakukan apa-apa lagi
-                return;
+        if (editAvatarButton) {
+            editAvatarButton.addEventListener('click', function() {
+                initCropper(avatarPreview.src);
+            });
+        }
+
+        // Tambahkan event listener untuk form submission
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                if (croppedAvatarInput.value) {
+                    // Jika ada gambar yang di-crop, tidak perlu melakukan apa-apa lagi
+                    return;
+                }
+                if (cropper) {
+                    e.preventDefault();
+                    cropper.getCroppedCanvas({
+                        width: 300,
+                        height: 300
+                    }).toBlob(function(blob) {
+                        const fileReader = new FileReader();
+                        fileReader.onload = function(e) {
+                            croppedAvatarInput.value = e.target.result;
+                            form.submit();
+                        };
+                        fileReader.readAsDataURL(blob);
+                    }, 'image/jpeg', 0.8);
+                }
+            });
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('password');
+        const requirementsDiv = document.querySelector('.password-requirements');
+        const requirements = {
+            length: document.getElementById('length'),
+            uppercase: document.getElementById('uppercase'),
+            lowercase: document.getElementById('lowercase'),
+            number: document.getElementById('number'),
+            special: document.getElementById('special')
+        };
+
+        const checkPassword = () => {
+            const password = passwordInput.value;
+            const criteria = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+            };
+
+            if (password.length > 0) {
+                requirementsDiv.style.display = 'block';
+            } else {
+                requirementsDiv.style.display = 'none';
             }
-            if (cropper) {
-                e.preventDefault();
-                cropper.getCroppedCanvas({
-                    width: 300,
-                    height: 300
-                }).toBlob(function(blob) {
-                    const fileReader = new FileReader();
-                    fileReader.onload = function(e) {
-                        croppedAvatarInput.value = e.target.result;
-                        form.submit();
-                    };
-                    fileReader.readAsDataURL(blob);
-                }, 'image/jpeg', 0.8);
+
+            for (const key in criteria) {
+                if (criteria[key]) {
+                    requirements[key].classList.remove('text-danger');
+                    requirements[key].classList.add('text-success');
+                    requirements[key].innerHTML = `<i class="fas fa-check"></i> ${requirements[key].textContent.trim()}`;
+                } else {
+                    requirements[key].classList.remove('text-success');
+                    requirements[key].classList.add('text-danger');
+                    requirements[key].innerHTML = `<i class="fas fa-times"></i> ${requirements[key].textContent.trim()}`;
+                }
+            }
+        };
+
+        passwordInput.addEventListener('input', checkPassword);
+        passwordInput.addEventListener('focus', checkPassword);
+        passwordInput.addEventListener('blur', () => {
+            if (passwordInput.value.length === 0) {
+                requirementsDiv.style.display = 'none';
             }
         });
-    }
-});
+    });
 </script>
 @endsection

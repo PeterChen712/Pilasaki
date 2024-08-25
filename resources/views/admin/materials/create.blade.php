@@ -1,9 +1,31 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Tambah Artikel Baru')
 
+@section('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<style>
+    body {
+        background: linear-gradient(135deg, #114B5F, #1A946F, #88D398, #F3E8D2);
+        min-height: 100vh;
+        margin: 0;
+    }
+    .photo-container {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+    #photo-image, #photo-preview {
+        max-width: 100%;
+        height: auto;
+    }
+    .cropper-container {
+        margin-bottom: 20px;
+    }
+</style>
+@endsection
+
 @section('content')
-<div class="container">
+<div class="container py-4">
     <h1 class="mb-4">Tambah Artikel Baru</h1>
 
     <form action="{{ route('admin.materials.store') }}" method="POST" enctype="multipart/form-data">
@@ -11,42 +33,59 @@
 
         <div class="mb-3">
             <label for="title" class="form-label">Judul</label>
-            <input type="text" class="form-control" id="title" name="title" required>
+            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" required value="{{ old('title') }}">
+            @error('title')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="description" class="form-label">Deskripsi</label>
-            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3" required>{{ old('description') }}</textarea>
+            @error('description')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="content" class="form-label">Konten</label>
-            <textarea class="form-control" id="content" name="content" rows="10" required></textarea>
+            <textarea class="form-control @error('content') is-invalid @enderror" id="content" name="content" rows="10" required>{{ old('content') }}</textarea>
+            @error('content')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="category_id" class="form-label">Kategori</label>
-            <select class="form-select" id="category_id" name="category_id" required>
+            <select class="form-select @error('category_id') is-invalid @enderror" id="category_id" name="category_id" required>
                 <option selected disabled>Pilih Kategori</option>
                 @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                 @endforeach
             </select>
+            @error('category_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="photo" class="form-label">Gambar</label>
-            <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+            <input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo" name="photo" accept="image/*">
             <small class="form-text text-muted">Ukuran maksimum: 2MB. Format yang diizinkan: JPG, JPEG, PNG.</small>
+            @error('photo')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
-        <div class="mb-3" id="photo-crop-container" style="display: none;">
-            <img id="photo-image" src="#" alt="Photo to crop" style="max-width: 100%;">
+        <div class="mb-3 photo-container" id="photo-crop-container" style="display: none;">
+            <div class="cropper-container">
+                <img id="photo-image" src="#" alt="Photo to crop">
+            </div>
             <button type="button" id="crop-button" class="btn btn-primary mt-2">{{ __('Crop') }}</button>
         </div>
 
-        <div class="mb-3" id="photo-preview-container" style="display: none;">
-            <img id="photo-preview" src="#" alt="Photo preview" style="max-width: 300px; max-height: 300px;">
+        <div class="mb-3 photo-container" id="photo-preview-container" style="display: none;">
+            <img id="photo-preview" src="#" alt="Photo preview">
             <button type="button" id="edit-photo-button" class="btn btn-secondary mt-2">{{ __('Edit Photo') }}</button>
         </div>
 
@@ -55,13 +94,11 @@
         <button type="submit" class="btn btn-primary">Simpan</button>
     </form>
 </div>
-
 @endsection
 
 @section('scripts')
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script>
     CKEDITOR.replace('content');
 
@@ -86,7 +123,7 @@
             }
 
             cropper = new Cropper(photoImage, {
-                aspectRatio: 1,
+                aspectRatio: 16 / 9,
                 viewMode: 1,
                 minCropBoxWidth: 200,
                 minCropBoxHeight: 200,
@@ -113,8 +150,8 @@
             cropButton.addEventListener('click', function() {
                 if (cropper) {
                     const croppedCanvas = cropper.getCroppedCanvas({
-                        width: 300,
-                        height: 300
+                        width: 800,
+                        height: 450
                     });
                     
                     croppedCanvas.toBlob(function(blob) {
@@ -137,19 +174,17 @@
             });
         }
 
-        // Tambahkan event listener untuk form submission
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', function(e) {
                 if (croppedPhotoInput.value) {
-                    // Jika ada gambar yang di-crop, tidak perlu melakukan apa-apa lagi
                     return;
                 }
                 if (cropper) {
                     e.preventDefault();
                     cropper.getCroppedCanvas({
-                        width: 300,
-                        height: 300
+                        width: 800,
+                        height: 450
                     }).toBlob(function(blob) {
                         const fileReader = new FileReader();
                         fileReader.onload = function(e) {
