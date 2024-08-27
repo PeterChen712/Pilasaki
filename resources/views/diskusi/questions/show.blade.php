@@ -36,7 +36,7 @@
                     {{ $question->created_at->diffForHumans() }}
                 </small>
                 @if (auth()->id() === $question->user_id)
-                    <button id="edit-question-btn" class="btn btn-warning btn-sm">Edit Pertanyaan</button>
+                    <button id="edit-question-btn" class="btn btn-success btn-sm">Edit Pertanyaan</button>
                 @endif
             </div>
         </div>
@@ -45,9 +45,8 @@
     @if (auth()->id() === $question->user_id)
         <div id="edit-question-form" class="card mb-4 d-none">
             <div class="card-body">
-                <form action="{{ route('questions.update', $question) }}" method="POST">
+                <form id="edit-question-form">
                     @csrf
-                    @method('PUT')
                     <div class="mb-3">
                         <label for="edit-title" class="form-label">Judul</label>
                         <input type="text" class="form-control" id="edit-title" name="title" value="{{ $question->title }}" required>
@@ -56,7 +55,7 @@
                         <label for="edit-content" class="form-label">Konten</label>
                         <textarea class="form-control" id="edit-content" name="content" rows="10" required>{{ $question->content }}</textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-success">Simpan Perubahan</button>
                     <button type="button" id="cancel-edit-btn" class="btn btn-secondary">Batal</button>
                 </form>
             </div>
@@ -119,6 +118,42 @@
 
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editBtn = document.getElementById('edit-question-btn');
+        const editForm = document.getElementById('edit-question-form');
+        const questionTitle = document.getElementById('question-title');
+        const questionContent = document.getElementById('question-content');
+
+        editBtn?.addEventListener('click', function() {
+            // Tampilkan form edit
+            editForm.classList.remove('d-none');
+            
+            // Sembunyikan konten pertanyaan
+            questionTitle.classList.add('d-none');
+            questionContent.classList.add('d-none');
+            
+            // Isi form dengan data pertanyaan saat ini
+            document.getElementById('edit-title').value = questionTitle.innerText;
+            document.getElementById('edit-content').value = questionContent.innerText;
+            
+            // Sembunyikan tombol edit
+            editBtn.classList.add('d-none');
+        });
+
+        // Tambahkan event listener untuk tombol batal
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        cancelEditBtn?.addEventListener('click', function() {
+            // Sembunyikan form edit
+            editForm.classList.add('d-none');
+            
+            // Tampilkan kembali konten pertanyaan
+            questionTitle.classList.remove('d-none');
+            questionContent.classList.remove('d-none');
+            
+            // Tampilkan kembali tombol edit
+            editBtn.classList.remove('d-none');
+        });
+    });
     var quill = new Quill('#editor-container', {
         theme: 'snow'
     });
@@ -164,11 +199,27 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                document.getElementById('question-title').innerText = data.question.title;
-                document.getElementById('question-content').innerText = data.question.content;
-                document.getElementById('edit-question-form').classList.add('d-none');
+                const questionTitle = document.getElementById('question-title');
+                const questionContent = document.getElementById('question-content');
+                const editForm = document.getElementById('edit-question-form');
+                const editBtn = document.getElementById('edit-question-btn');
+
+                questionTitle.innerText = data.question.title;
+                questionContent.innerText = data.question.content;
+                
+                // Sembunyikan form edit
+                editForm.classList.add('d-none');
+                
+                // Tampilkan kembali konten pertanyaan
+                questionTitle.classList.remove('d-none');
+                questionContent.classList.remove('d-none');
+                
+                // Tampilkan kembali tombol edit
+                editBtn.classList.remove('d-none');
+
+                alert(data.message);
             } else {
-                alert('Gagal mengupdate pertanyaan');
+                alert('Gagal mengupdate pertanyaan: ' + data.message);
             }
         })
         .catch(error => {

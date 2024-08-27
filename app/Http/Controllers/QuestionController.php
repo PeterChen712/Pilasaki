@@ -120,16 +120,24 @@ class QuestionController extends Controller
 
     public function update(Request $request, Question $question)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+        // Validasi input
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'content' => 'required',
         ]);
 
-        $question->update($validated);
+        // Periksa apakah pengguna yang login adalah pemilik pertanyaan
+        if (auth()->id() !== $question->user_id) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        // Update pertanyaan
+        $question->update($validatedData);
 
         return response()->json([
             'success' => true,
-            'question' => $question
+            'question' => $question,
+            'message' => 'Pertanyaan berhasil diperbarui'
         ]);
     }
 
