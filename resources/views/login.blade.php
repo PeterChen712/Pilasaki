@@ -200,7 +200,7 @@
             </div>
         </form>
         <div class="login-divider">
-            <span>Or</span>
+            <span>Atau</span>
         </div>
         <div class="text-center mt-3">
             Tidak punya akun? <a href="{{ route('register') }}">Daftar disini</a>
