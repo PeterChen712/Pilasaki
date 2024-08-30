@@ -10,23 +10,74 @@
         min-height: 100vh;
         margin: 0;
     }
+    .form-wrapper {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        margin: 20px auto;
+        max-width: 800px;
+    }
+    h1 {
+        color: #114B5F;
+        font-weight: 600;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .form-label {
+        font-weight: 500;
+        color: #1A946F;
+    }
+    .form-control, .form-select {
+        border: 1px solid #88D398;
+        border-radius: 8px;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #1A946F;
+        box-shadow: 0 0 0 0.2rem rgba(26, 148, 111, 0.25);
+    }
+    .btn-success {
+        background-color: #1A946F;
+        border: none;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .btn-success:hover {
+        background-color: #114B5F;
+    }
     .photo-container {
-        max-width: 100%;
+        background-color: #F3E8D2;
+        border-radius: 8px;
+        padding: 20px;
         margin-bottom: 20px;
     }
     #photo-image, #photo-preview {
         max-width: 100%;
         height: auto;
+        border-radius: 8px;
     }
     .cropper-container {
         margin-bottom: 20px;
+    }
+    .btn-secondary {
+        background-color: #88D398;
+        border: none;
+        color: #114B5F;
+        font-weight: 500;
+    }
+    .btn-secondary:hover {
+        background-color: #1A946F;
+        color: white;
     }
 </style>
 @endsection
 
 @section('content')
-<div class="container py-4">
-    <h1 class="mb-4">Tambah Artikel Baru</h1>
+<div class="form-wrapper">
+    <h1>Tambah Artikel Baru</h1>
 
     <form action="{{ route('admin.materials.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -91,7 +142,7 @@
 
         <input type="hidden" id="cropped-photo" name="cropped_photo">
 
-        <button type="submit" class="btn btn-primary">Simpan</button>
+        <button type="submit" class="btn btn-success">Simpan</button>
     </form>
 </div>
 @endsection
