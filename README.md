@@ -37,7 +37,6 @@
 
 8. Jika ada pesan seperti ini:
     > The database 'pisah' does not exist on the 'mysql' connection. Would you like to create it? (yes/no) [yes]
-    
     klik enter
 
 
@@ -51,7 +50,7 @@
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
     DB_PORT=3306
-    DB_DATABASE=pisah
+    DB_DATABASE='''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''/////////pisah
     DB_USERNAME=root
     DB_PASSWORD=
     ```
