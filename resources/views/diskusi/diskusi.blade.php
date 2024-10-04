@@ -192,18 +192,28 @@
                     <a href="{{ route('diskusi', ['sort' => 'view_count']) }}" class="nav-link"><span class="nav-icon">👁️</span> Paling Banyak Dilihat</a>
                 </div>
                 <div class="top-coder" style="background-color: white">
-                    <h4>Top user</h4>
+                    <h4>Top User</h4>
                     @if(isset($topUsers) && count($topUsers) > 0)
                         @foreach($topUsers as $user)
                             <div class="coder">
-                                <img src="{{ $user->avatar ?? asset('images/user.png') }}" alt="{{ $user->name }}" width="40" height="40">
+                                @if($user->avatar)
+                                    <img src="{{ route('avatar.show', $user->id) }}" alt="{{ $user->name }}" class="rounded-circle me-2" width="40" height="40">
+                                @else
+                                    @if(file_exists(public_path('images/user.png')))
+                                        <img src="{{ asset('images/user.png') }}" alt="{{ $user->name }}" class="rounded-circle me-2" width="40" height="40">
+                                    @else
+                                        <div class="rounded-circle me-2 bg-secondary d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                                            <span class="text-white">{{ substr($user->name, 0, 1) }}</span>
+                                        </div> 
+                                    @endif
+                                @endif
                                 <span>{{ $user->name }} - {{ $user->points }} Point</span>
                             </div>
                         @endforeach
                     @else
                         <p>Belum ada user terbaik</p>
                     @endif
-                </div>
+                </div>                
             </div>
         </div>
     </div>

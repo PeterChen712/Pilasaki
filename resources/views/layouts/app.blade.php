@@ -118,8 +118,12 @@
                 <ul class="navbar-nav ms-auto align-items-center">
                     <!-- Normal Navigation Links -->
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
-                    </li>
+                        @if(auth()->check() && auth()->user()->is_admin)
+                            <a class="nav-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
+                        @else
+                            <a class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
+                        @endif
+                    </li>                                                            
                     <li class="nav-item">
                         <a class="nav-link {{ Request::routeIs('klasifikasi') ? 'active' : '' }}" href="{{ route('klasifikasi') }}">Klasifikasi</a>
                     </li>
